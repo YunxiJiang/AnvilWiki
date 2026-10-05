@@ -215,12 +215,12 @@ curl -I https://<你的域名>/
 # 期望: HTTP/2 200
 
 # 2. sitemap 可访问
-curl https://<你的域名>/sitemap-index.xml
+curl https://<你的域名>/sitemap.xml
 # 期望: 返回 XML，含你的所有页面 URL
 
 # 3. robots.txt 可访问
 curl https://<你的域名>/robots.txt
-# 期望: 含 Sitemap: https://<你的域名>/sitemap-index.xml
+# 期望: 含 Sitemap: https://<你的域名>/sitemap.xml
 
 # 4. 多语言页面可访问
 curl -I https://<你的域名>/ja/   # 日文首页
@@ -243,7 +243,7 @@ curl -I https://<你的域名>/privacy-policy/
 
 2. **Google Search Console**：
    - 添加你的域名（选"网域"方式 → DNS 验证）
-   - 提交 `sitemap-index.xml`
+   - 提交 `sitemap.xml`
    - 等 24-48 小时看收录情况
 
 ### 性能验证

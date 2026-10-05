@@ -8,7 +8,7 @@
 import { siteUrl } from '~/config/site';
 import { site } from '~/config/site';
 import { locales, defaultLocale, type Locale } from '~/i18n/routing';
-import { detailPath, listPath } from './url';
+import { detailPath, listPath, homeUrl } from './url';
 
 /** Organization JSON-LD — injected globally in BaseLayout. */
 export function organizationJsonLd() {
@@ -34,7 +34,7 @@ export function websiteJsonLd(locale: Locale = defaultLocale) {
     inLanguage: locale,
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${siteUrl}/search?q={search_term_string}`,
+      target: `${siteUrl}/search/?q={search_term_string}`,
       'query-input': 'required name=search_term_string',
     },
   };
@@ -95,7 +95,7 @@ export function breadcrumbJsonLd(opts: {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: `${siteUrl}${locale === defaultLocale ? '' : `/${locale}`}`,
+        item: `${siteUrl}${homeUrl(locale)}`,
       },
       {
         '@type': 'ListItem',
@@ -135,7 +135,7 @@ export function simpleBreadcrumbJsonLd(opts: {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: `${siteUrl}${locale === defaultLocale ? '' : `/${locale}`}`,
+        item: `${siteUrl}${homeUrl(locale)}`,
       },
       {
         '@type': 'ListItem',

@@ -5,12 +5,15 @@ import tailwind from '@astrojs/tailwind';
 import icon from 'astro-icon';
 
 import { locales, defaultLocale } from './src/i18n/routing';
+import { sitemapAlias } from './scripts/rename-sitemap-index';
 
 // https://astro.build/config
 export default defineConfig({
   site: process.env.SITE_URL || 'https://anvilwiki.pages.dev',
   output: 'static',
-  trailingSlash: 'never',
+  // Every URL ends with "/" — pairs with the default `build.format: 'directory'`
+  // (dir/index.html). Cloudflare Pages 308-redirects bare /dir to /dir/.
+  trailingSlash: 'always',
   image: {
     // Emit explicit width/height on responsive <Image> output to prevent CLS.
     responsiveStyles: true,
@@ -37,6 +40,9 @@ export default defineConfig({
         locales: Object.fromEntries(locales.map((l) => [l, l])),
       },
     }),
+    // Must come after sitemap(): renames the generated sitemap-index.xml to
+    // sitemap.xml in dist so the sitemap lives at /sitemap.xml.
+    sitemapAlias(),
     tailwind({ applyBaseStyles: false }),
     icon(),
   ],

@@ -48,8 +48,10 @@ function rewriteHost(url: string, baseUrl: string): string {
 }
 
 async function fetchSitemapUrls(baseUrl: string): Promise<string[]> {
-  // Try sitemap-index.xml first (what @astrojs/sitemap generates), then sitemap-0.xml.
-  const candidates = [`${baseUrl}/sitemap-index.xml`, `${baseUrl}/sitemap.xml`];
+  // The build renames the sitemap index to sitemap.xml (see
+  // scripts/rename-sitemap-index.ts). Fall back to sitemap-index.xml for
+  // sites built without that step.
+  const candidates = [`${baseUrl}/sitemap.xml`, `${baseUrl}/sitemap-index.xml`];
 
   for (const idx of candidates) {
     try {
@@ -91,7 +93,7 @@ async function fetchSitemapUrls(baseUrl: string): Promise<string[]> {
   }
 
   throw new Error(
-    `Could not fetch sitemap from ${baseUrl}. Tried sitemap-index.xml and sitemap.xml. Is the site running?`,
+    `Could not fetch sitemap from ${baseUrl}. Tried sitemap.xml and sitemap-index.xml. Is the site running?`,
   );
 }
 

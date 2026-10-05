@@ -4,10 +4,12 @@ import {
   websiteJsonLd,
   articleJsonLd,
   breadcrumbJsonLd,
+  simpleBreadcrumbJsonLd,
   itemListJsonLd,
   faqPageJsonLd,
   pageTitle,
 } from '~/lib/seo';
+import { siteUrl } from '~/config/site';
 
 describe('SEO helpers', () => {
   describe('organizationJsonLd', () => {
@@ -44,7 +46,7 @@ describe('SEO helpers', () => {
       expect(json.headline).toBe('Test Article');
       expect(json.datePublished).toContain('2026-01-01');
       expect(json.image).toMatch(/^https?:\/\//);
-      expect(json.mainEntityOfPage['@id']).toMatch(/\/bosses\/test-slug$/);
+      expect(json.mainEntityOfPage['@id']).toMatch(/\/bosses\/test-slug\/$/);
     });
 
     it('uses dateModified when provided, otherwise falls back to datePublished', () => {
@@ -87,6 +89,34 @@ describe('SEO helpers', () => {
       expect(json.itemListElement[0].name).toBe('Home');
       expect(json.itemListElement[1].name).toBe('All Bosses');
       expect(json.itemListElement[2].name).toBe('Gelum Guide');
+    });
+
+    it('links Home to the trailing-slash home URL of the locale', () => {
+      const en = breadcrumbJsonLd({
+        category: 'bosses',
+        categoryLabel: 'B',
+        title: 'T',
+        slug: 's',
+        locale: 'en',
+      });
+      const ja = breadcrumbJsonLd({
+        category: 'bosses',
+        categoryLabel: 'B',
+        title: 'T',
+        slug: 's',
+        locale: 'ja',
+      });
+      expect(en.itemListElement[0].item).toBe(`${siteUrl}/`);
+      expect(ja.itemListElement[0].item).toBe(`${siteUrl}/ja/`);
+    });
+  });
+
+  describe('simpleBreadcrumbJsonLd', () => {
+    it('links Home to the trailing-slash home URL of the locale', () => {
+      const en = simpleBreadcrumbJsonLd({ pageLabel: 'FAQ', path: '/faq/', locale: 'en' });
+      const ja = simpleBreadcrumbJsonLd({ pageLabel: 'FAQ', path: '/ja/faq/', locale: 'ja' });
+      expect(en.itemListElement[0].item).toBe(`${siteUrl}/`);
+      expect(ja.itemListElement[0].item).toBe(`${siteUrl}/ja/`);
     });
   });
 
